@@ -1,0 +1,233 @@
+[
+    {
+        "id": "SIG_WEBSHELL_WSO",
+        "name": "WSO Webshell Tespiti",
+        "severity": "CRITICAL",
+        "can_clean": false,
+        "pattern": "/(FilesMan|WSO_VERSION|wso_action|WSOsetcookie|default_action\\s*=\\s*[\\x22\\x27]FilesMan[\\x22\\x27])/i",
+        "desc": "Bilinen WSO / FilesMan PHP yönetim ve arka kapı (webshell) scripti.",
+        "scope": "php"
+    },
+    {
+        "id": "SIG_WEBSHELL_C99_R57",
+        "name": "c99 / r57 Webshell Ailesi",
+        "severity": "CRITICAL",
+        "can_clean": false,
+        "pattern": "/(c99shell|r57shell|c99_sess_put|c99_buff_prepare|r57_buff_prepare)/i",
+        "desc": "c99 veya r57 ailesine ait zararlı sunucu kontrol webshelli.",
+        "scope": "php"
+    },
+    {
+        "id": "SIG_WEBSHELL_B374K",
+        "name": "b374k / Alfa Webshell",
+        "severity": "CRITICAL",
+        "can_clean": false,
+        "pattern": "/(b374k|alfa_shell|alfa\\s*team|ALFA_DATA)/i",
+        "desc": "Gelişmiş yetki yükseltme ve dosya yönetimi sağlayan Alfa/b374k webshelli.",
+        "scope": "php"
+    },
+    {
+        "id": "SIG_EVAL_BASE64",
+        "name": "Gizlenmiş Eval Base64 Yürütücüsü",
+        "severity": "CRITICAL",
+        "can_clean": true,
+        "clean_pattern": "/<\\?\\x70\\x68\\x70\\s+@(eval|assert)\\s*\\(\\s*base64_decode\\s*\\([\\x22\\x27][a-zA-Z0-9+\\/=]+[\\x22\\x27]\\)\\s*\\);?\\s*\\?\\x3e/is",
+        "pattern": "/(eval|assert)\\s*\\(\\s*(base64_decode|gzinflate|gzuncompress|str_rot13|hex2bin)\\s*\\(/is",
+        "desc": "Şifrelenmiş veya gizlenmiş zararlı PHP kodunu çalıştırmak için kullanılan eval(base64_decode...) yapısı.",
+        "scope": "php"
+    },
+    {
+        "id": "SIG_DYNAMIC_CALL_SUPERGLOBALS",
+        "name": "Dinamik Süper Global Fonksiyon Çağrısı",
+        "severity": "CRITICAL",
+        "can_clean": true,
+        "pattern": "/\\$_(GET|POST|REQUEST|COOKIE|SERVER)\\[[^\\]]+\\]\\s*\\(\\s*\\$_(GET|POST|REQUEST|COOKIE|SERVER)\\[[^\\]]+\\]\\s*\\)/i",
+        "desc": "Dışarıdan gelen parametreyle dinamik fonksiyon çalıştıran uzaktan kod yürütme (RCE) arka kapısı.",
+        "scope": "php"
+    },
+    {
+        "id": "SIG_ASSERT_BACKDOOR",
+        "name": "Assert Tabanlı Arka Kapı (PHP Backdoor)",
+        "severity": "CRITICAL",
+        "can_clean": true,
+        "clean_pattern": "/<\\?\\x70\\x68\\x70\\s+@?assert\\s*\\(\\s*\\$_(POST|GET|REQUEST)\\[[^\\]]+\\]\\s*\\);?\\s*\\?\\x3e/is",
+        "pattern": "/assert\\s*\\(\\s*\\$_(POST|GET|REQUEST|COOKIE)\\[/i",
+        "desc": "assert() fonksiyonu üzerinden doğrudan parametre alan zararlı kod tetikleyici.",
+        "scope": "php"
+    },
+    {
+        "id": "SIG_PREG_REPLACE_EVAL",
+        "name": "preg_replace /e Yürütme İhlali",
+        "severity": "CRITICAL",
+        "can_clean": true,
+        "pattern": "/preg_replace\\s*\\(\\s*[\\x22\\x27][^\\x22\\x27]*\\/e[\\x22\\x27]\\s*,\\s*\\$_(POST|GET|REQUEST|COOKIE)/i",
+        "desc": "preg_replace içindeki /e değiştiricisi ile zararlı kod yürütme mekanizması.",
+        "scope": "php"
+    },
+    {
+        "id": "SIG_CREATE_FUNCTION_INJECTION",
+        "name": "create_function() Anonim Arka Kapı",
+        "severity": "HIGH",
+        "can_clean": true,
+        "pattern": "/create_function\\s*\\(\\s*[\\x22\\x27][^\\x22\\x27]*[\\x22\\x27]\\s*,\\s*\\$_(POST|GET|REQUEST|COOKIE)/i",
+        "desc": "create_function ile dış parametreleri çalıştıran arka kapı yapısı.",
+        "scope": "php"
+    },
+    {
+        "id": "SIG_WP_VCD_MALWARE",
+        "name": "wp-vcd / WordPress Zararlı Enjeksiyonu",
+        "severity": "HIGH",
+        "can_clean": true,
+        "clean_pattern": "/\\/\\*\\s*wp-vcd\\s*\\*\\/.*?\\/\\*\\s*end\\s+wp-vcd\\s*\\*\\/|if\\s*\\(!function_exists\\([\\x22\\x27]wp_vcd[\\x22\\x27]\\)\\)\\s*\\{.*?\\}/is",
+        "pattern": "/(wp-vcd|wp_vcd|wp_cd|class\\s+wp_vcd)/i",
+        "desc": "Temalara ve eklentilere bulaşan bilinen wp-vcd spam ve arka kapı zararlısı.",
+        "scope": "php"
+    },
+    {
+        "id": "SIG_MALICIOUS_HEADER_INJECT",
+        "name": "Dosya Başı Enjekte Zararlı Blok (Prepended Shell)",
+        "severity": "CRITICAL",
+        "can_clean": true,
+        "clean_pattern": "/^<\\?\\x70\\x68\\x70\\s+@[a-zA-Z0-9_]+\\([^\\)]+\\);\\s*\\?\\x3e/is",
+        "pattern": "/^<\\?\\x70\\x68\\x70\\s*@?([a-zA-Z0-9_]+)?\\(\\s*[\\x22\\x27][a-zA-Z0-9\\/\\+=]{40,}[\\x22\\x27]\\s*\\);?\\s*\\?\\x3e/is",
+        "desc": "index.php veya wp-config gibi meşru dosyaların başına sessizce eklenen tek satırlık şifreli payload.",
+        "scope": "php"
+    },
+    {
+        "id": "SIG_HASH_WRAPPED_MALWARE",
+        "name": "MD5 Hash İle Kapsüllenmiş Zararlı Enjeksiyon",
+        "severity": "HIGH",
+        "can_clean": true,
+        "clean_pattern": "/\\/\\*[a-f0-9]{32}\\*\\/.*?\\/\\*\\/[a-f0-9]{32}\\*\\//is",
+        "pattern": "/\\/\\*[a-f0-9]{32}\\*\\/.*?\\/\\*\\/[a-f0-9]{32}\\*\\//is",
+        "desc": "Dosya içine /*[hash]*/ ... /*/[hash]*/ etiketleriyle gizlenmiş zararlı enjeksiyon.",
+        "scope": "content"
+    },
+    {
+        "id": "SIG_GLOBALS_OBFUSCATION",
+        "name": "Hex Karartmalı Globals Değişkeni",
+        "severity": "HIGH",
+        "can_clean": true,
+        "pattern": "/\\$\\{\\s*[\\x22\\x27]\\\\x47\\\\x4c\\\\x4f\\\\x42\\\\x41\\\\x4c\\\\x53[\\x22\\x27]\\s*\\}/i",
+        "desc": "PHP kodunda tespit edilen karartılmış GLOBALS saldırı yapısı.",
+        "scope": "php"
+    },
+    {
+        "id": "SIG_CHR_CONCAT_EVAL",
+        "name": "Karakter Birleştirme ile Kod Yürütme (Chr Concat)",
+        "severity": "HIGH",
+        "can_clean": true,
+        "pattern": "/(chr\\(\\d+\\)\\s*\\.\\s*){6,}/i",
+        "desc": "Antivirüslerden kaçmak için chr() fonksiyonuyla oluşturulan gizli komut zinciri.",
+        "scope": "php"
+    },
+    {
+        "id": "SIG_HIDDEN_IFRAME",
+        "name": "Gizli Iframe Spam/Zararlı Enjeksiyonu",
+        "severity": "MEDIUM",
+        "can_clean": true,
+        "clean_pattern": "/<iframe[^>]+(width\\s*:\\s*0|height\\s*:\\s*0|display\\s*:\\s*none|visibility\\s*:\\s*hidden)[^>]*>.*?<\\/iframe>/is",
+        "pattern": "/<iframe[^>]+(display\\s*:\\s*none|visibility\\s*:\\s*hidden|width\\s*=\\s*[\\x22\\x27]?0[\\x22\\x27]?|height\\s*=\\s*[\\x22\\x27]?0[\\x22\\x27]?)[^>]*>/i",
+        "desc": "Kullanıcıdan gizlenmiş, arka planda zararlı URL yükleyen sıfır boyutlu iframe.",
+        "scope": "content"
+    },
+    {
+        "id": "SIG_SUSPICIOUS_EXEC",
+        "name": "Yetkisiz Sistem Komut Çalıştırıcı",
+        "severity": "HIGH",
+        "can_clean": false,
+        "pattern": "/(shell_exec|passthru|proc_open|popen)\\s*\\(\\s*\\$_(POST|GET|REQUEST|COOKIE)/i",
+        "desc": "Dış parametrelerle doğrudan sunucu terminal komutu çalıştıran fonksiyon çağrısı.",
+        "scope": "php"
+    },
+    {
+        "id": "LIB_WEBSHELL_WEEVELY",
+        "name": "Weevely Webshell İmzası",
+        "severity": "CRITICAL",
+        "can_clean": false,
+        "pattern": "/(?:weevely|cmd\\.php\\?cmd=|webshell\\s*[:=])/i",
+        "desc": "Weevely veya benzeri komut çalıştıran webshell belirteci.",
+        "scope": "php"
+    },
+    {
+        "id": "LIB_WEBSHELL_INDOXPLOIT",
+        "name": "Indoxploit / PHP Webshell İmzası",
+        "severity": "CRITICAL",
+        "can_clean": false,
+        "pattern": "/(?:Indoxploit|Ninja\\s*Shell|FilesMan\\s*Shell|WSO_VERSION)/i",
+        "desc": "Yaygın PHP webshell ailelerinde görülen sabit tanımlayıcı.",
+        "scope": "php"
+    },
+    {
+        "id": "LIB_SUPERGLOBAL_CODE_EXECUTION",
+        "name": "Süper Global ile Kod Yürütme",
+        "severity": "CRITICAL",
+        "can_clean": false,
+        "pattern": "/\\b(?:eval|assert|include|include_once|require|require_once|system|shell_exec|passthru|proc_open|popen|call_user_func)\\s*\\(\\s*\\$_(?:GET|POST|REQUEST|COOKIE|FILES|SERVER)\\b/i",
+        "desc": "Dışarıdan gelen süper global değeri doğrudan yürütme veya dahil etme sınırına taşıyor.",
+        "scope": "php"
+    },
+    {
+        "id": "LIB_DYNAMIC_INCLUDE",
+        "name": "Dinamik Dosya Dahil Etme",
+        "severity": "HIGH",
+        "can_clean": false,
+        "pattern": "/\\b(?:include|include_once|require|require_once)\\s*\\(?\\s*\\$_(?:GET|POST|REQUEST|COOKIE)\\b/i",
+        "desc": "Kullanıcı girdisinin dosya dahil etme yolu olarak kullanılması.",
+        "scope": "php"
+    },
+    {
+        "id": "LIB_FILE_WRITE_FROM_INPUT",
+        "name": "Girdiden Dosya Yazma Arka Kapısı",
+        "severity": "CRITICAL",
+        "can_clean": false,
+        "pattern": "/\\b(?:file_put_contents|fwrite|fputs)\\s*\\([^;\\n]*\\$_(?:POST|GET|REQUEST|COOKIE)\\b/is",
+        "desc": "HTTP girdisinin sunucudaki dosya yazma işlemine doğrudan aktarılması.",
+        "scope": "php"
+    },
+    {
+        "id": "LIB_REMOTE_PAYLOAD_EXECUTION",
+        "name": "Uzak Payload Çekip Yürütme",
+        "severity": "CRITICAL",
+        "can_clean": false,
+        "pattern": "/\\b(?:eval|assert)\\s*\\(\\s*(?:file_get_contents|curl_exec|wp_remote_retrieve_body|gzinflate)\\s*\\(/is",
+        "desc": "Uzak veya sıkıştırılmış içeriğin yürütülebilir kod olarak kullanılması.",
+        "scope": "php"
+    },
+    {
+        "id": "LIB_SUSPICIOUS_PHP_TAG_IN_ASSET",
+        "name": "PHP Kodu İçeren Statik Varlık",
+        "severity": "HIGH",
+        "can_clean": false,
+        "pattern": "/<\\?(?:php|=)\\b/i",
+        "desc": "JavaScript, CSS, HTML veya görsel gibi statik varlıkta PHP açılış etiketi.",
+        "scope": "content"
+    },
+    {
+        "id": "LIB_OBFUSCATED_JS_EXECUTION",
+        "name": "Karartılmış JavaScript Yürütme",
+        "severity": "HIGH",
+        "can_clean": false,
+        "pattern": "/\\b(?:eval|Function)\\s*\\(\\s*(?:atob|unescape|decodeURIComponent)\\s*\\(/i",
+        "desc": "Kod çözücü fonksiyonun dinamik JavaScript yürütmesiyle birleştirilmesi.",
+        "scope": "content"
+    },
+    {
+        "id": "LIB_SUSPICIOUS_REDIRECT",
+        "name": "Gizli SEO/Yönlendirme Enjeksiyonu",
+        "severity": "MEDIUM",
+        "can_clean": false,
+        "pattern": "/(?:document\\.location|window\\.location|location\\.replace)\\s*=\\s*[\\x22\\x27]https?:\\/\\//i",
+        "desc": "Kullanıcıyı dış bir adrese yönlendiren enjekte edilmiş JavaScript kalıbı.",
+        "scope": "content"
+    },
+    {
+        "id": "LIB_HTACCESS_REDIRECT_INJECTION",
+        "name": ".htaccess Yönlendirme Enjeksiyonu",
+        "severity": "HIGH",
+        "can_clean": false,
+        "pattern": "/(?:RewriteRule|Redirect(?:Match| permanent)?)\\s+.*https?:\\/\\//i",
+        "desc": "Sunucu yönlendirme kuralları içinde dış spam veya phishing adresi.",
+        "scope": "content"
+    }
+]
