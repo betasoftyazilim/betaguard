@@ -1,0 +1,18 @@
+{
+  "schema": "beta-guard-whitelist",
+  "version": 1,
+  "safe_php_template_functions": ["translate", "__", "_e", "esc_html__", "esc_attr__", "esc_html_e", "esc_attr_e", "esc_html", "esc_attr", "esc_js"],
+  "trusted_metadata_hosts": ["downloads.wordpress.org"],
+  "safe_structures": [
+    {"id": "wordpress-core", "validation": "installed-version-and-locale-official-checksum", "note": "Yalnız resmi sağlama toplamı eşleşen içerik güvenilirdir."},
+    {"id": "wordpress-translation", "validation": "php-literal-return-only", "note": "Dil dosyası yalnız sabit çeviri verisi döndürmelidir; beklenmeyen çalıştırılabilir kod muaf değildir."},
+    {"id": "wordpress-options", "validation": "decode-json-or-serialization-and-inspect-leaves", "note": "Font, güncelleme, dil paketi ve arayüz verileri kod değildir; içerideki enjeksiyonlar yine taranır."},
+    {"id": "wordpress-template", "validation": "constant-arguments-and-approved-functions-only", "note": "WordPress çeviri şablonları yalnız sabit argümanlarla güvenli kabul edilir."}
+  ],
+  "benign_examples": [
+    {"type": "translation-template", "text": "return \"<?php echo translate( 'The changes you made will be lost if you navigate away from this page.' ); ?>\";"},
+    {"type": "translation-package", "text": "https://downloads.wordpress.org/translation/core/7.0/tr_TR.zip"},
+    {"type": "font-metadata", "data": {"ABeeZee": {"label": "ABeeZee", "variants": ["italic", "regular"], "category": "sans-serif"}}},
+    {"type": "ui-metadata", "data": {"schema": "ui-factory-dsl", "version": 1, "root": {"type": "text", "props": {"content": "WordPress security release notes"}}}}
+  ]
+}
