@@ -22,7 +22,7 @@
         "name": "b374k / Alfa Webshell",
         "severity": "CRITICAL",
         "can_clean": false,
-        "pattern": "/(b374k|alfa_shell|alfa\\s*team|ALFA_DATA)/i",
+        "pattern": "/(?:\\$b374k|b374k\\s*(?:\\(|v?\\d|\\_|shell)|alfa_shell|alfa\\s*team|ALFA_DATA)/i",
         "desc": "Gelişmiş yetki yükseltme ve dosya yönetimi sağlayan Alfa/b374k webshelli.",
         "scope": "php"
     },
